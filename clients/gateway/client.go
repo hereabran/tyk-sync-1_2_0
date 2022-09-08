@@ -18,7 +18,7 @@ type Client struct {
 }
 
 const (
-	endpointAPIs     string = "/tyk/apis/"
+	endpointAPIs     string = "/tyk/apis"
 	endpointCerts    string = "/tyk/certs"
 	reloadAPIs       string = "/tyk/reload/group"
 	endpointPolicies string = "/tyk/policies"
@@ -113,11 +113,16 @@ func (c *Client) CreateAPI(def *objects.DBApiDefinition) (string, error) {
 
 	for _, api := range apis {
 		if api.APIID == def.APIID {
+			fmt.Println("Warning: API ID Exists")
 			return "", UseUpdateError
 		}
 
 		if api.Proxy.ListenPath == def.Proxy.ListenPath {
-			return "", UseUpdateError
+			if api.Domain == def.Domain {
+				fmt.Println("Warning: Listen Path Exists")
+				return "", UseUpdateError
+			}
+			// return "", UseUpdateError
 		}
 	}
 

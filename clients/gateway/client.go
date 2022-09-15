@@ -213,6 +213,8 @@ func (c *Client) UpdateAPI(def *objects.DBApiDefinition) error {
 	}
 
 	updatePath := urljoin.Join(c.url, endpointAPIs, def.APIID)
+	// fmt.Println("Update URL:", updatePath)
+	// fmt.Println(def.APIDefinition)
 	uResp, err := grequests.Put(updatePath, &grequests.RequestOptions{
 		JSON: def.APIDefinition,
 		Headers: map[string]string{
@@ -332,8 +334,7 @@ func (c *Client) DeleteAPI(id string) error {
 }
 
 func (c *Client) deleteAPI(id string) error {
-	delPath := urljoin.Join(c.url, endpointAPIs)
-	delPath += id
+	delPath := urljoin.Join(c.url, endpointAPIs, id)
 
 	delResp, err := grequests.Delete(delPath, &grequests.RequestOptions{
 		Headers: map[string]string{
